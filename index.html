@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FCM Client App</title>
+    <link rel="stylesheet" href="cs.css">
+</head>
+<body>
+    <div id="app">
+        <h1>Firebase Cloud Messaging Client App</h1>
+        <button id="subscribeBtn">Subscribe</button>
+        <button id="unsubscribeBtn">Unsubscribe</button> <br>
+        <a href="/notifications.html">database review</a>
+
+        <div id="status"></div>
+    </div>
+    
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.5/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.5/firebase-analytics-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.5/firebase-messaging-compat.js"></script>
+    <!-- Add Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.5/firebase-database-compat.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.5/firebase-firestore-compat.js"></script>
+    
+    <!-- App Script -->
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Realtime Database Table</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.5/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.5/firebase-database-compat.js"></script>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <h1>Data Table</h1>
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Status</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data rows will be dynamically added here -->
+        </tbody>
+    </table>
+
+    <script>
+        // Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyBHHDOeDqWy15PgLi5ZkTs-LMyFAQlieYc",
+            authDomain: "task2-3-687fd.firebaseapp.com",
+            databaseURL: "https://task2-3-687fd-default-rtdb.firebaseio.com/",
+            projectId: "task2-3-687fd",
+            storageBucket: "task2-3-687fd.appspot.com",
+            messagingSenderId: "883782646802",
+            appId: "1:883782646802:web:bc5271320d6f9d1fe9accb",
+            measurementId: "G-2QNYZV64FH"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Reference to the Realtime Database path
+        const databaseRef = database.ref('subscriptions'); // Replace 'users' with your database path
+        const databaseRef_2 = database.ref('background messages');
+        const databaseRef_3 = database.ref('foreground messages');
+
+        // Function to fetch data from Realtime Database and populate the table
+        function populateTable() {
+    const tableBody = document.querySelector("#dataTable tbody");
+    tableBody.innerHTML = ""; // Clear existing rows
+
+    const fetchData = (ref, processFunction) => {
+        return ref.once('value')
+            .then((snapshot) => {
+                const data = snapshot.val();
+                processFunction(data);
+            })
+            .catch((error) => {
+                console.error("Error fetching data:", error);
+            });
+    };
+
+    const processDatabaseRef = (data) => {
+        for (const id in data) {
+            const rowData = data[id];
+            const row = document.createElement("tr");
+
+            // Add table cells for `databaseRef`
+            row.innerHTML = `
+                <td>${id}</td>
+                <td>${rowData.status || 'N/A'}</td>
+            `;
+            tableBody.appendChild(row);
+        }
+    };
+
+    const processDatabaseRef2 = (data) => {
+        for (const outerKey in data) {
+            const outerObject = data[outerKey];
+
+            for (const innerKey in outerObject) {
+                const innerObject = outerObject[innerKey];
+
+                if (innerObject.subscribeToTopic) {
+                    const row = document.createElement("tr");
+
+                    // Add table cells for `databaseRef_2`
+                    row.innerHTML = `
+                        <td>${innerKey}</td>
+                        <td>${innerObject.subscribeToTopic}</td>
+                    `;
+                    tableBody.appendChild(row);
+                }
+            }
+        }
+    };
+
+    const processDatabaseRef3 = (data) => {
+        for (const outerKey in data) {
+            const outerObject = data[outerKey];
+
+            for (const innerKey in outerObject) {
+                const innerObject = outerObject[innerKey];
+
+                if (innerObject.subscribeToTopic) {
+                    const row = document.createElement("tr");
+
+                    // Add table cells for `databaseRef_3`
+                    row.innerHTML = `
+                        <td>${innerKey}</td>
+                        <td>${innerObject.subscribeToTopic}</td>
+                    `;
+                    tableBody.appendChild(row);
+                }
+            }
+        }
+    };
+
+    // Fetch and process data from all three database references
+    Promise.all([
+        fetchData(databaseRef, processDatabaseRef),
+        fetchData(databaseRef_2, processDatabaseRef2),
+        fetchData(databaseRef_3, processDatabaseRef3)
+    ]).then(() => {
+        console.log("Table populated with data from all references.");
+    });
+}
+
+// Call the function to populate the table
+populateTable();
+
+    </script>
+</body>
+</html>
